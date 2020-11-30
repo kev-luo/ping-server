@@ -21,8 +21,8 @@ module.exports = {
       }
     },
     async getPingsByLocation(_, { long, latt }) {
-      console.log(long, latt);
       try {
+        // console.log(long, latt);
         const pings = await Ping.find({location: {
           $near: {
            $maxDistance: 10000000,
@@ -35,6 +35,9 @@ module.exports = {
           .populate("author")
           .populate({ path: "support", populate: { path: "user" } })
           .sort({ createdAt: -1 });
+
+          console.log(pings);
+        return pings;
         // pings.map(ping => console.log(ping.location));
         return pings;
       } catch (err) {
