@@ -22,7 +22,6 @@ module.exports = {
     },
     async getPingsByLocation(_, { long, latt }) {
       try {
-        // console.log(long, latt);
         const pings = await Ping.find({location: {
           $near: {
            $maxDistance: 10000000,
@@ -36,9 +35,6 @@ module.exports = {
           .populate({ path: "support", populate: { path: "user" } })
           .sort({ createdAt: -1 });
 
-          console.log(pings);
-        return pings;
-        // pings.map(ping => console.log(ping.location));
         return pings;
       } catch (err) {
         throw new Error(err);
@@ -85,8 +81,6 @@ module.exports = {
       if (body.trim() === "") {
         throw new Error("post body must not be empty");
       }
-
-      // log the coordinates to send to the db
 
       const ping = await new Ping({
         body,

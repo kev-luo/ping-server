@@ -50,14 +50,12 @@ const pingSchema = new Schema(
         },
       },
     ],
-    // list of hashtags contained in the ping
     hashtagsList: [String],
   },
   { timestamps: true }
 );
 
 pingSchema.index({ location: "2dsphere" });
-// pingSchema.index({"createdAt": 1}, { expiresAfterSeconds: 86400 });
 
 const Ping = mongoose.model("Ping", pingSchema);
 
