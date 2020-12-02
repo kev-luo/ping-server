@@ -5,18 +5,23 @@ const pingSchema = new Schema(
   {
     body: String,
     imageUrl: String,
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      expires: "86400s"
+    },
     location: {
       type: {
-        type: String, 
-        enum: ['Point'],
+        type: String,
+        enum: ["Point"],
         default: "Point",
-        required: true
+        required: true,
       },
       coordinates: {
         type: [Number],
         default: [0, 0],
-        required: true
-      }
+        required: true,
+      },
     },
     author: {
       type: Schema.Types.ObjectId,
@@ -41,17 +46,16 @@ const pingSchema = new Schema(
         supported: Boolean,
         user: {
           type: Schema.Types.ObjectId,
-          ref: "User"
-        }
-      }
+          ref: "User",
+        },
+      },
     ],
-    // list of hashtags contained in the ping
     hashtagsList: [String],
   },
   { timestamps: true }
 );
 
-pingSchema.indexes({location: '2dsphere'});
+pingSchema.index({ location: "2dsphere" });
 
 const Ping = mongoose.model("Ping", pingSchema);
 

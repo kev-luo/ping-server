@@ -46,9 +46,10 @@ module.exports = {
       }
 
       try {
-        const lookAtUser = await User.findById(userId).populate("pings");
-        if (lookAtUser) {
-          return lookAtUser;
+        const foundUser = await User.findById(userId).populate("pings")
+
+        if (foundUser) {
+          return foundUser;
         } else {
           throw new Error("user not found");
         }
