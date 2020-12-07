@@ -44,6 +44,7 @@ module.exports = {
       try {
         const ping = await Ping.findById(pingId)
           .populate("author")
+          .populate({ path: "support", populate: { path: "user" } })
           .populate("comments.author");
         if (ping) {
           return ping;

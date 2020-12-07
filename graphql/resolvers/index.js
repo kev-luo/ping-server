@@ -11,6 +11,12 @@ module.exports = {
           })
           return supported.length
         },
+        dismissCount: (parent) => {
+          const dismissed = parent.support.filter((supporter) => {
+            return !supporter.supported;
+          });
+          return dismissed.length;
+        },
         commentCount: (parent) => parent.comments.length
     },
     Query: {
