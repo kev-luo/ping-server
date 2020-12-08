@@ -46,7 +46,7 @@ module.exports = {
       }
 
       try {
-        const foundUser = await User.findById(userId).populate("pings")
+        const foundUser = await User.findById(userId).populate("pings");
 
         if (foundUser) {
           return foundUser;
@@ -130,7 +130,7 @@ module.exports = {
         email,
         username,
         password,
-        imageUrl: null
+        imageUrl: null,
       });
       const res = await newUser.save();
       const token = generateToken(res);
@@ -144,10 +144,10 @@ module.exports = {
       const user = checkAuth(context);
 
       const updatedUser = await User.findOneAndUpdate(
-          {_id: user.id},
-          { imageUrl: imageUrl },
-          { new: true }
-      )
+        { _id: user.id },
+        { imageUrl: imageUrl },
+        { new: true }
+      );
 
       return updatedUser;
     },
@@ -157,18 +157,19 @@ module.exports = {
 
       const { errors, valid } = validateDeleteUser(password);
       if (!valid) {
-        throw new UserInputError("wrong credentials", { errors });
+        throw new UserInputError("errors", { errors });
       }
 
       const match = await bcrypt.compare(password, userDeep.password);
       if (!match) {
-        errors.general = "wrong credentials";
-        throw new UserInputError("wrong credentials", { errors });
+        throw new UserInputError("wrong credentials", {
+          errors: { password: "Incorrect password" },
+        });
       }
 
       if (match) {
         try {
-          await Ping.deleteMany({ author: user.id});
+          await Ping.deleteMany({ author: user.id });
           await User.deleteOne({ _id: user.id });
         } catch (err) {
           throw new Error(err);
