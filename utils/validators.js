@@ -51,3 +51,14 @@ module.exports.validateDeleteUser = (password) => {
     valid: Object.keys(errors).length < 1
   }
 }
+
+module.exports.validateTextBody = (body) => {
+  const errors = {};
+  if(body.trim() === "") {
+    errors.body = "Text field must not be empty"
+  }
+  return {
+    errors,
+    valid: Object.keys(errors).length < 1
+  }
+}

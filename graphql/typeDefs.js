@@ -11,6 +11,7 @@ module.exports = gql`
     comments: [Comment!]
     support: [Support!]
     supportCount: Int!
+    dismissCount: Int!
     commentCount: Int!
   }
   type Location {

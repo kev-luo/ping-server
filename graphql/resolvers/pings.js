@@ -1,6 +1,7 @@
 const { AuthenticationError, UserInputError } = require("apollo-server");
 const mongoose = require("mongoose");
 
+const { validateTextBody } = require("../../utils/validators");
 const Ping = require("../../models/Ping");
 const User = require("../../models/User");
 const checkAuth = require("../../utils/check-auth");
@@ -44,6 +45,7 @@ module.exports = {
       try {
         const ping = await Ping.findById(pingId)
           .populate("author")
+          .populate({ path: "support", populate: { path: "user" } })
           .populate("comments.author");
         if (ping) {
           return ping;
@@ -75,11 +77,9 @@ module.exports = {
   Mutation: {
     async createPing(_, { body, imageUrl, lat, long }, context) {
       const user = checkAuth(context);
-
-      console.log(body);
-
-      if (body.trim() === "") {
-        throw new Error("post body must not be empty");
+      const { errors, valid } = validateTextBody(body);
+      if(!valid) {
+        throw new UserInputError("Post body must not be empty", { errors} )
       }
 
       const ping = await new Ping({

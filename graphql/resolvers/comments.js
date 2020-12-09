@@ -4,6 +4,7 @@ const {
   withFilter,
 } = require("apollo-server");
 
+const { validateTextBody } = require("../../utils/validators");
 const Ping = require("../../models/Ping");
 const checkAuth = require("../../utils/check-auth");
 
@@ -14,12 +15,9 @@ module.exports = {
     createComment: async (_, { pingId, body }, context) => {
       const user = checkAuth(context);
 
-      if (body.trim() === "") {
-        throw new UserInputError("empty comment", {
-          errors: {
-            body: "comment body must not be empty",
-          },
-        });
+      const { errors, valid } = validateTextBody(body);
+      if(!valid) {
+        throw new UserInputError("Post body must not be empty", { errors} )
       }
 
       const commentAdded = { body, author: user.id };
